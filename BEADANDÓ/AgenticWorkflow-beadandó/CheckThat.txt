@@ -1,0 +1,57 @@
+
+Preparation.
+    Unzip            java-lab-exercise-tests-*.zip
+    Change dir to    lab04-05 (change the lab number as needed)
+    In there, unzip  junit6-checkthat-demo.zip
+
+    Make sure that you are using Java 25+: run  java --version  and  javac --version
+
+Details by system.
+    Linux and Mac: run once     : chmod +x check.cmd
+    Mac:           run once     : xattr -d com.apple.quarantine check.cmd
+    Windows cmd (not PowerShell): leave out "./" in the commands below
+
+You may use check.cmd to compile and run structural/functional/suite tests.
+You'll find the exact javac and java commands being run in its printout.
+
+    ./check.cmd TimeStructureTest.java TimeStructureTest
+    ./check.cmd time/TimeTest.java     time.TimeTest
+    ./check.cmd TimeTestSuite.java     TimeTestSuite
+
+Structural test files and test suite files are always given to you.
+For details about how to create your own functional tests, see time/TimeTest.java
+Note that your code is not compiled by the above when working with structural tests.
+
+More details:
+    JUnit 6  : User guide: https://docs.junit.org/current/user-guide/
+    CheckThat: Run the script without arguments.
+
+; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; : ; :
+
+Here is the expected output of the full suite.
+The failures are intentional. See the comments in Time.java for the trivial fixes.
+
+'-- TimeTestSuite [OK]
+    + StructuralTests [OK]
+    | '-- TimeStructureTest [OK]
+    |   +-- constructor() [OK]
+    |   +-- fieldMin() [OK]
+    |   +-- fieldHour() [X] Wrong return type for field Time.hour
+    |   '-- methodGetEarlier() [OK]
+    ' FunctionalTests [OK]
+      '-- TimeTest [OK]
+        +-- The comment in Time.java shows how to fix the demo mistake in it [X] expected: <12.0> but was: <13.0>
+        +-- testGetMin() [OK]
+        +-- The comment in Time.java shows how to fix the demo mistake in it [X] expected: <12.0> but was: <13.0>
+        +-- testSetMin() [OK]
+        '-- testEarlier(int, int, int, int, int, int) [OK]
+          +-- [1] "01", "02", "01", "02", "12", "34" [X] expected: <1.0> but was: <2.0>
+          +-- [2] "01", "59", "01", "59", "12", "34" [X] expected: <1.0> but was: <2.0>
+          '-- [3] "12", "34", "23", "59", "12", "34" [X] expected: <12.0> but was: <13.0>
+
+Failures (6):
+    <some details omitted>
+[5/8 tests successful] [3/8 tests failed]
+
+After applying the trivial fixes in Time.java, the final printout changes to:
+[All 11 tests successful]
