@@ -77,6 +77,7 @@ public class Agent{
             System.out.println(steps.get(i).getStructuredOutput());
         }
     }
+    
 
     public static Agent loadAgent(String filename) throws IOException, WorkflowFormatException{
         if(filename == null || filename.strip().isEmpty()){
@@ -84,10 +85,7 @@ public class Agent{
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))){
-            String line;
-            while((line = reader.readLine()) != null && line.strip().isEmpty()){
-                // skip leading empty lines
-            }
+            String line = reader.readLine();
 
             if(line == null){
                 throw new WorkflowFormatException("a fájl tartalma hibás formátumú.");
@@ -114,17 +112,14 @@ public class Agent{
     }
 
     private static WorkflowStep parseStep(BufferedReader reader) throws IOException, WorkflowFormatException{
-        String line;
-        while((line = reader.readLine()) != null && line.strip().isEmpty()){
-            // skip empty lines between steps
-        }
-
+        String line = reader.readLine();
+        
         if(line == null){
             return null;
         }
 
         if(!line.strip().equals("STEP")){
-            throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos.");
+            throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos. x");
         }
 
         String name = null;
@@ -141,9 +136,9 @@ public class Agent{
                 break;
             }
 
-            String[] parts = trimmed.split(":", 2);
+            String[] parts = trimmed.split("=", 2);
             if(parts.length != 2){
-                throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos.");
+                throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos. xx");
             }
 
             String key = parts[0].strip();
@@ -163,16 +158,16 @@ public class Agent{
                         outputType = SchemaType.valueOf(value);
                     }
                     catch(IllegalArgumentException exception){
-                        throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos.");
+                        throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos. xxx");
                     }
                     break;
                 default:
-                    throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos.");
+                    throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos. xxxx");
             }
         }
 
         if(line == null || name == null || prompt == null || systemPrompt == null || outputType == null){
-            throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos.");
+            throw new WorkflowFormatException("a lépés tartalma hibás vagy hiányos. xxxxx");
         }
 
         return new WorkflowStep(name, prompt, systemPrompt, new StructuredOutput(new SchemaType[]{outputType}));

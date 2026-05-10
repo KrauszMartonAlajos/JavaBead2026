@@ -5,6 +5,10 @@ import agentic.workflow.llm.StructuredOutput;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.beans.Transient;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -27,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 public class AgentTest {
 	@Test
-	public void testExpectsStructuredOutput(){
+	public void testStepCount(){
 		SchemaType[] types = {SchemaType.STRING, SchemaType.INT, SchemaType.BOOLEAN};
 		StructuredOutput output = new StructuredOutput(types);
 
@@ -85,5 +89,30 @@ public class AgentTest {
         //agent.addStep(wfs);
 
         assertEquals(agent_empty.findStepByName("step"),null);
+    }
+
+
+    //.testWith(testCase("testLoadAgentSuccess"), "Ellenőrzi, hogy egy érvényes workflow fájl sikeresen betölthető.")
+    //.testWith(testCase("testLoadAgentRejectsMissingHeader"), "Ellenőrzi, hogy a hiányzó AGENT fejléc formátumhibát okoz.")
+    //.testWith(testCase("testLoadAgentRejectsDuplicateStepNames"), "Ellenőrzi, hogy a fájlban lévő azonos lépésnevek nem elfogadhatók.");
+    @Test
+    public void testLoadAgentSuccess() throws IOException, WorkflowFormatException{
+        Agent agent = Agent.loadAgent("calculator.agent");
+
+
+        assertFalse(agent == null);
+        assertEquals("Calculator Helper", agent.getName());
+    }
+    //   .testWith(testCase("testLoadAgentRejectsMissingHeader"), "Ellenőrzi, hogy a hiányzó AGENT fejléc formátumhibát okoz.")
+
+    @Test
+    public void testLoadAgentRejectsMissingHeader() throws IOException, WorkflowFormatException{
+        assertThrows(WorkflowFormatException.class, () -> Agent.loadAgent("fapapucs.agent"));
+    }
+    //   .testWith(testCase("testLoadAgentRejectsDuplicateStepNames"), "Ellenőrzi, hogy a fájlban lévő azonos lépésnevek nem elfogadhatók.");
+
+    @Test
+    public void testLoadAgentRejectsDuplicateStepNames(){
+        assertThrows(WorkflowFormatException.class, () -> Agent.loadAgent("xd.agent"));
     }
 }
