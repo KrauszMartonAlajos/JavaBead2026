@@ -22,7 +22,7 @@ public class Agent{
     }
 
     public List<WorkflowStep> getSteps(){
-        return this.steps; //clone kéne !!!
+        return this.steps;
     }
 
     public Agent(String name){
@@ -86,7 +86,7 @@ public class Agent{
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))){
             String line;
             while((line = reader.readLine()) != null && line.strip().isEmpty()){
-                // skip leading empty lines
+                // skip üres
             }
 
             if(line == null){
@@ -116,7 +116,7 @@ public class Agent{
     private static WorkflowStep parseStep(BufferedReader reader) throws IOException, WorkflowFormatException{
         String line;
         while((line = reader.readLine()) != null && line.strip().isEmpty()){
-            // skip empty lines between steps
+            // skip üres
         }
 
         if(line == null){

@@ -86,4 +86,45 @@ public class AgentTest {
 
         assertEquals(agent_empty.findStepByName("step"),null);
     }
+
+    @Test 
+    public void testStepCount(){
+        SchemaType[] types = {SchemaType.STRING, SchemaType.INT, SchemaType.BOOLEAN};
+		StructuredOutput output = new StructuredOutput(types);
+
+        WorkflowStep wfs = new WorkflowStep("step", "prompt", "systemprompt", output);
+
+        Agent agent = new Agent("Ödön");
+
+        agent.addStep(wfs);
+
+        assertEquals(agent.getStepCount(), 1);
+    }
+
+    @Test
+    public void testLoadAgentSuccess() throws Exception{
+        Agent agent = Agent.loadAgent("test_workflow.txt");
+        
+        assertEquals(agent.getName(), "TestAgent");
+        assertEquals(agent.getStepCount(), 2);
+        
+        WorkflowStep step1 = agent.findStepByName("step1");
+        WorkflowStep step2 = agent.findStepByName("step2");
+        
+        assertTrue(step1 != null);
+        assertTrue(step2 != null);
+        assertEquals(step1.getName(), "step1");
+        assertEquals(step2.getName(), "step2");
+    }
+
+    @Test
+    public void testLoadAgentRejectsMissingHeader(){
+        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("test_no_header.txt");});
+    }
+
+    @Test
+    public void testLoadAgentRejectsDuplicateStepNames(){
+        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("test_dupe.txt");});
+    }
+
 }

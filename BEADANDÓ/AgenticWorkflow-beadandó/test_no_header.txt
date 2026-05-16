@@ -1,0 +1,6 @@
+STEP
+name: step1
+prompt: What is 2+2?
+systemPrompt: You are a calculator.
+output: INT
+ENDSTEP

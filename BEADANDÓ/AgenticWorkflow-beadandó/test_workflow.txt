@@ -1,0 +1,15 @@
+AGENT: TestAgent
+
+STEP
+name: step1
+prompt: What is 2+2?
+systemPrompt: You are a calculator.
+output: INT
+ENDSTEP
+
+STEP
+name: step2
+prompt: Explain the answer.
+systemPrompt: You are an educator.
+output: STRING
+ENDSTEP
