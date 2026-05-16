@@ -5,6 +5,10 @@ import agentic.workflow.llm.StructuredOutput;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.beans.Transient;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -27,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 public class AgentTest {
 	@Test
-	public void testExpectsStructuredOutput(){
+	public void testStepCount(){
 		SchemaType[] types = {SchemaType.STRING, SchemaType.INT, SchemaType.BOOLEAN};
 		StructuredOutput output = new StructuredOutput(types);
 
@@ -87,44 +91,29 @@ public class AgentTest {
         assertEquals(agent_empty.findStepByName("step"),null);
     }
 
-    @Test 
-    public void testStepCount(){
-        SchemaType[] types = {SchemaType.STRING, SchemaType.INT, SchemaType.BOOLEAN};
-		StructuredOutput output = new StructuredOutput(types);
-
-        WorkflowStep wfs = new WorkflowStep("step", "prompt", "systemprompt", output);
-
-        Agent agent = new Agent("Ödön");
-
-        agent.addStep(wfs);
-
-        assertEquals(agent.getStepCount(), 1);
-    }
-
     @Test
     public void testLoadAgentSuccess() throws Exception{
-        Agent agent = Agent.loadAgent("test_workflow.txt");
+        Agent agent = Agent.loadAgent("study-coach.agent");
         
-        assertEquals(agent.getName(), "TestAgent");
-        assertEquals(agent.getStepCount(), 2);
+        assertEquals(agent.getName(), "Study Coach");
+        assertEquals(agent.getStepCount(), 3);
         
-        WorkflowStep step1 = agent.findStepByName("step1");
-        WorkflowStep step2 = agent.findStepByName("step2");
+        WorkflowStep step1 = agent.findStepByName("ask_topic");
+        WorkflowStep step2 = agent.findStepByName("create_quiz");
         
         assertTrue(step1 != null);
         assertTrue(step2 != null);
-        assertEquals(step1.getName(), "step1");
-        assertEquals(step2.getName(), "step2");
+        assertEquals(step1.getName(), "ask_topic");
+        assertEquals(step2.getName(), "create_quiz");
     }
 
     @Test
     public void testLoadAgentRejectsMissingHeader(){
-        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("test_no_header.txt");});
+        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("fapapucs.agent");});
     }
 
     @Test
     public void testLoadAgentRejectsDuplicateStepNames(){
-        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("test_dupe.txt");});
+        assertThrows(WorkflowFormatException.class, () -> {Agent.loadAgent("xd.agent");});
     }
-
 }
